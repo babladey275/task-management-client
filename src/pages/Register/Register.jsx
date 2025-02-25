@@ -2,19 +2,19 @@ import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 import toast from "react-hot-toast";
 import useAuth from "../../hooks/useAuth";
-import useAxiosPublic from "../../hooks/useAxiosPublic";
+
 import { Link, useNavigate } from "react-router";
 import GoogleLogin from "../Shared/SocialLogin/GoogleLogin";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const Register = () => {
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm();
   const { createUser, updateUserProfile } = useAuth();
-  const axiosPublic = useAxiosPublic();
+  const axiosSecure = useAxiosSecure();
   const navigate = useNavigate();
 
   const onSubmit = (data) => {
@@ -30,17 +30,15 @@ const Register = () => {
               name: data.name,
               email: data.email,
             };
-            axiosPublic.post("/users", userInfo).then((res) => {
+            axiosSecure.post("/users", userInfo).then((res) => {
               if (res.data.insertedId) {
-                reset();
                 Swal.fire({
                   icon: "success",
                   title: "Registration Successful!",
                   text: "You have successfully registered!",
                   confirmButtonText: "OK",
-                }).then(() => {
-                  navigate("/");
                 });
+                navigate("/home");
               }
             });
           })
@@ -53,8 +51,8 @@ const Register = () => {
       });
   };
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="w-full max-w-lg p-8 my-8 md:p-12 bg-white rounded-lg shadow-lg">
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="w-full max-w-lg p-8 md:p-12 bg-white rounded-lg shadow-lg">
         <h1 className="text-3xl font-semibold text-center mb-6">
           Create an Account
         </h1>

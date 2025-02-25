@@ -37,15 +37,15 @@ const Login = () => {
         `,
           },
         });
-        navigate("/");
+        navigate("/home");
       })
       .catch((error) => {
         toast.error(`Login failed: ${error.message}`);
       });
   };
   return (
-    <div className="hero min-h-screen">
-      <div className="w-full max-w-lg p-8 my-8 md:p-12 bg-white rounded-lg shadow-lg">
+    <div className="hero min-h-screen bg-gray-100">
+      <div className="w-full max-w-lg p-8 md:p-12 bg-white rounded-lg shadow-lg">
         <h1 className="text-3xl font-semibold text-center mb-6">
           Login your account
         </h1>
