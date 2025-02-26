@@ -10,7 +10,11 @@ import useAxiosSecure from "../../hooks/useAxiosSecure";
 const TaskBoard = () => {
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
-  const { data: tasks = [], refetch } = useQuery({
+  const {
+    data: tasks = [],
+    refetch,
+    isLoading,
+  } = useQuery({
     queryKey: ["tasks", user?.email],
     queryFn: async () => {
       if (user?.email) {
@@ -27,8 +31,10 @@ const TaskBoard = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    setTasksState(tasks);
-  }, [tasks]);
+    if (tasks.length !== tasksState.length) {
+      setTasksState(tasks);
+    }
+  }, [tasks, tasksState]);
 
   const addTask = () => {
     setIsModalOpen(true);
@@ -87,16 +93,23 @@ const TaskBoard = () => {
         >
           + Add Task
         </button>
-        <div className="grid grid-cols-3 gap-6">
-          {categories.map((category) => (
-            <CategoryColumn
-              key={category.value}
-              category={category}
-              tasks={tasksByCategory[category.value]}
-              moveTask={moveTask}
-            />
-          ))}
-        </div>
+        {isLoading ? (
+          <div className="flex justify-center items-center my-12">
+            <span className="loading loading-bars loading-xl"></span>
+          </div>
+        ) : (
+          <div className="grid grid-cols-3 gap-6">
+            {categories.map((category) => (
+              <CategoryColumn
+                key={category.value}
+                category={category}
+                tasks={tasksByCategory[category.value]}
+                moveTask={moveTask}
+                refetch={refetch}
+              />
+            ))}
+          </div>
+        )}
 
         {/* modal */}
         {isModalOpen && <AddTaskModal closeModal={closeModal} />}

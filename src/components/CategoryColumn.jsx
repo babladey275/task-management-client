@@ -1,7 +1,7 @@
 import { useDrop } from "react-dnd";
 import TaskCard from "./TaskCard";
 
-const CategoryColumn = ({ category, tasks, moveTask }) => {
+const CategoryColumn = ({ category, tasks, moveTask, refetch }) => {
   const [, drop] = useDrop({
     accept: "TASK",
     drop: (item) => moveTask(item.taskId, category.value),
@@ -17,7 +17,9 @@ const CategoryColumn = ({ category, tasks, moveTask }) => {
       {filteredTasks.length === 0 ? (
         <p>No tasks in this category</p>
       ) : (
-        filteredTasks.map((task) => <TaskCard key={task._id} task={task} />)
+        filteredTasks.map((task) => (
+          <TaskCard key={task._id} task={task} refetch={refetch} />
+        ))
       )}
     </div>
   );

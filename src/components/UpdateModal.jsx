@@ -1,46 +1,40 @@
 import { useForm } from "react-hook-form";
-import Swal from "sweetalert2";
 import useAxiosSecure from "../hooks/useAxiosSecure";
-import useAuth from "../hooks/useAuth";
+import Swal from "sweetalert2";
 
-const AddTaskModal = ({ closeModal }) => {
-  const axiosSecure = useAxiosSecure();
-  const { user } = useAuth();
-
+const UpdateModal = ({ closeModal, task }) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
+  const axiosSecure = useAxiosSecure();
 
   const onSubmit = async (data) => {
     console.log(data);
-
-    const task = {
-      email: user?.email,
+    const updatedTask = {
       title: data.title,
       description: data.description,
       timestamp: new Date().toISOString(),
-      category: "todo",
     };
-    const res = await axiosSecure.post("/tasks", task);
-    console.log(res.data);
-    if (res.data.insertedId) {
-      Swal.fire({
-        title: "Success!",
-        text: "Your task has been added.",
-        icon: "success",
-        confirmButtonText: "OK",
-      });
+    const res = await axiosSecure.patch(`/tasks/${task._id}`, updatedTask);
+    console.log(res);
+    if (res.data.modifiedCount > 0) {
       closeModal();
+      Swal.fire({
+        position: "top",
+        icon: "success",
+        title: `${data.title} is updated to the task.`,
+        showConfirmButton: false,
+        timer: 2000,
+      });
     }
   };
-
   return (
     <div className="fixed inset-0 bg-gray-600 bg-opacity-70 flex justify-center items-center overflow-auto">
       <div className="bg-white rounded-lg p-8 max-w-3xl w-full sm:w-120 max-h-[90vh] flex flex-col">
         <h2 className="text-2xl md:text-3xl font-semibold mb-4 text-center">
-          Add your Task
+          Update your Task
         </h2>
 
         <form
@@ -54,6 +48,7 @@ const AddTaskModal = ({ closeModal }) => {
             </label>
             <input
               type="text"
+              defaultValue={task.title}
               {...register("title", {
                 required: "Title is required",
                 maxLength: {
@@ -75,6 +70,7 @@ const AddTaskModal = ({ closeModal }) => {
               Description
             </label>
             <textarea
+              defaultValue={task.description}
               {...register("description", {
                 maxLength: {
                   value: 200,
@@ -104,7 +100,7 @@ const AddTaskModal = ({ closeModal }) => {
               type="submit"
               className="cursor-pointer bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
             >
-              Add
+              Update
             </button>
           </div>
         </form>
@@ -113,4 +109,4 @@ const AddTaskModal = ({ closeModal }) => {
   );
 };
 
-export default AddTaskModal;
+export default UpdateModal;
