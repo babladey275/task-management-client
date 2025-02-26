@@ -19,7 +19,7 @@ const TaskBoard = () => {
     queryFn: async () => {
       if (user?.email) {
         const res = await axiosSecure.get(`/tasks/${user.email}`);
-        console.log(res.data);
+        // console.log(res.data);
         return res.data;
       }
     },
@@ -66,7 +66,7 @@ const TaskBoard = () => {
       });
       refetch();
     } catch (error) {
-      console.error("Error moving task:", error);
+      // console.error("Error moving task:", error);
       setTasksState(tasks);
     }
   };

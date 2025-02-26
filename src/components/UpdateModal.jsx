@@ -11,14 +11,14 @@ const UpdateModal = ({ closeModal, task }) => {
   const axiosSecure = useAxiosSecure();
 
   const onSubmit = async (data) => {
-    console.log(data);
+    // console.log(data);
     const updatedTask = {
       title: data.title,
       description: data.description,
       timestamp: new Date().toISOString(),
     };
     const res = await axiosSecure.patch(`/tasks/${task._id}`, updatedTask);
-    console.log(res);
+    // console.log(res);
     if (res.data.modifiedCount > 0) {
       closeModal();
       Swal.fire({

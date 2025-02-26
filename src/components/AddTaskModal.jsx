@@ -14,7 +14,7 @@ const AddTaskModal = ({ closeModal }) => {
   } = useForm();
 
   const onSubmit = async (data) => {
-    console.log(data);
+    // console.log(data);
 
     const task = {
       email: user?.email,
@@ -24,7 +24,7 @@ const AddTaskModal = ({ closeModal }) => {
       category: "todo",
     };
     const res = await axiosSecure.post("/tasks", task);
-    console.log(res.data);
+    // console.log(res.data);
     if (res.data.insertedId) {
       Swal.fire({
         title: "Success!",

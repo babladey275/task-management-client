@@ -16,7 +16,7 @@ const GoogleLogin = () => {
         name: result.user?.displayName,
       };
       axiosSecure.post("users", userInfo).then((res) => {
-        console.log(res);
+        // console.log(res);
         navigate("/home");
       });
     });
